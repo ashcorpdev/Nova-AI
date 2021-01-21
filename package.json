@@ -1,0 +1,16 @@
+{
+  "name": "nova_ai",
+  "version": "1.0.0",
+  "description": "Node Operated Virtual Assistant",
+  "main": "index.js",
+  "author": "ashen",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "fs": "^0.0.1-security",
+    "twitch": "^4.3.8",
+    "twitch-auth": "^4.3.8",
+    "twitch-webhooks": "^4.3.8"
+  }
+}
