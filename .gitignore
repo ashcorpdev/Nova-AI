@@ -1,5 +1,6 @@
 # Config files
 config.json
+tokens.json
 
 # Logs
 logs
