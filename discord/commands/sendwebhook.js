@@ -2,7 +2,7 @@ const { Discord, client, webhookClient } = require('./../client')
 module.exports = {
     name: 'sendwebhook',
     description: 'Send Webhook command',
-    execute(message, args) {
+    async execute(message, args) {
         if (!args.length) {
             return message.channel.send(`You did not provide any valid arguments, ${message.author}.`)
         } else {

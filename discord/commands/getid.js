@@ -4,7 +4,7 @@ module.exports = {
     name: 'getid',
     description: 'Get user id command',
     args: true,
-    execute(message, args) {
+    async execute(message, args) {
         if(!args.length){
             return message.channel.send(`You did not return any valid arguments, ${message.author}.`)
         }else {

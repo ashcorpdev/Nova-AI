@@ -13,14 +13,11 @@ const {
 } = require('./config.json')
 const tokenData = require('./tokens.json');
 const { Discord, client } = require('./discord/client')
-const { auth } = require('./twitch/client')
-const { RefreshableAuthProvider, StaticAuthProvider } = require('twitch-auth');
-const { ChatClient } = require('twitch-chat-client');
-const { PubSubClient } = require('twitch-pubsub-client');
-const { ApiClient } = require('twitch');
+const { apiClient, auth, chatClient, pubsubClient, webhookListener } = require('./twitch/client')
   
 // Load Twitch handlers
 const alertHandler = require('./twitch/handlers/alert')
+const liveHandler = require('./twitch/handlers/live')
 
 async function main() {
 
@@ -51,7 +48,7 @@ async function main() {
         // If message is from a bot, return.
         if (message.author.bot) return
 
-        if (message.content.startsWith(discord.prefix)) {
+        if (message.content.startsWith(discord.prefix) && message.member.roles.cache.has(discord.roles.moderator_role_id)) {
             const args = message.content.slice(discord.prefix.length).trim().split(/ +/)
             const commandName = args.shift().toLowerCase()
 
@@ -85,17 +82,33 @@ async function main() {
 
     */
 
-    const apiClient = new ApiClient({ authProvider: auth });
-    const chatClient = new ChatClient(auth, { channels: [twitch.bot_channel] });
-    const pubsubClient = new PubSubClient();
     const userID = await pubsubClient.registerUserListener(auth).then(console.log('PubSub client connected.')).catch(console.error);
     await chatClient.connect().then(console.log('Connected to Twitch chat.')).catch(console.error);
-    const user = await apiClient.helix.users.getUserByName('e1fb0t');
+    await webhookListener.listen();
 
     const listener = await pubsubClient.onWhisper(userID, (message) => {
         console.log('[Debug] Received whisper.')
-        alertHandler.alert(message.text)
+        alertHandler.alert(message.text, message.senderName)
     }).catch(console.error)
+
+    let prevStream = await apiClient.helix.streams.getStreamByUserName('dawnwhisper');
+    const user = await apiClient.helix.users.getUserByName('dawnwhisper');
+
+    const streamLive = await webhookListener.subscribeToStreamChanges(user, async stream => {
+    if (stream) {
+        if (!prevStream) {
+            console.log(`${stream.userDisplayName} just went live with title: ${stream.title}`);
+            liveHandler.liveAnnounce();
+        }
+    } else {
+        // no stream, no display name
+        const user = await apiClient.helix.users.getUserByName('dawnwhisper');
+        console.log(`${user.displayName} just went offline`);
+    }
+    prevStream = stream ?? null;
+});
+
+
 }
 
 
