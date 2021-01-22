@@ -13,10 +13,14 @@ const {
 } = require('./config.json')
 const tokenData = require('./tokens.json');
 const { Discord, client } = require('./discord/client')
-const { RefreshableAuthProvider, StaticAuthProvider, ClientCredentialsAuthProvider } = require('twitch-auth');
+const { auth } = require('./twitch/client')
+const { RefreshableAuthProvider, StaticAuthProvider } = require('twitch-auth');
 const { ChatClient } = require('twitch-chat-client');
 const { PubSubClient } = require('twitch-pubsub-client');
 const { ApiClient } = require('twitch');
+  
+// Load Twitch handlers
+const alertHandler = require('./twitch/handlers/alert')
 
 async function main() {
 
@@ -80,22 +84,6 @@ async function main() {
         TWITCH
 
     */
-    const auth = new RefreshableAuthProvider(
-        new StaticAuthProvider(twitch.bot_clientid, tokenData.accessToken),
-        {
-            clientSecret: twitch.bot_secret,
-            refreshToken: tokenData.refreshToken,
-            expiry: tokenData.expiryTimestamp === null ? null : new Date(tokenData.expiryTimestamp),
-            onRefresh: async ({ accessToken, refreshToken, expiryDate }) => {
-                const newTokenData = {
-                    accessToken,
-                    refreshToken,
-                    expiryTimestamp: expiryDate === null ? null : expiryDate.getTime()
-                };
-                fs.writeFile('./tokens.json', JSON.stringify(newTokenData, null, 4), () => { })
-            }
-        }
-    );
 
     const apiClient = new ApiClient({ authProvider: auth });
     const chatClient = new ChatClient(auth, { channels: [twitch.bot_channel] });
@@ -105,7 +93,8 @@ async function main() {
     const user = await apiClient.helix.users.getUserByName('e1fb0t');
 
     const listener = await pubsubClient.onWhisper(userID, (message) => {
-        console.log('Received whisper.')
+        console.log('[Debug] Received whisper.')
+        alertHandler.alert(message.text)
     }).catch(console.error)
 }
 

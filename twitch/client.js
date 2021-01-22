@@ -1,6 +1,7 @@
 const { twitch } = require('../config.json')
+const tokenData = require('../tokens.json')
 const fs = require('fs')
-const { RefreshableAuthProvider, StaticAuthProvider, ClientCredentialsAuthProvider } = require('twitch-auth');
+const { RefreshableAuthProvider, StaticAuthProvider } = require('twitch-auth');
 const { ChatClient } = require('twitch-chat-client');
 const { PubSubClient } = require('twitch-pubsub-client');
 const { ApiClient } = require('twitch');
