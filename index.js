@@ -12,12 +12,14 @@ const {
     bot_info
 } = require('./config.json')
 const tokenData = require('./tokens.json');
+const fetch = require('node-fetch')
 const { Discord, client } = require('./discord/client')
 const { apiClient, auth, chatClient, pubsubClient, webhookListener } = require('./twitch/client')
   
 // Load Twitch handlers
 const alertHandler = require('./twitch/handlers/alert')
-const liveHandler = require('./twitch/handlers/live')
+const liveHandler = require('./twitch/handlers/live');
+const { randomInt } = require('crypto');
 
 async function main() {
 
@@ -69,6 +71,46 @@ async function main() {
             }
         }
 
+        
+
+        if(message.member.roles.cache.has(discord.roles.moderator_role_id)){
+
+            switch (message.content) {
+                case 'OI GOBLIN':
+                    message.channel.send('WOT U WANT?');
+                    break;
+                
+                case 'good goblin':
+                    var shinies;
+                    shinies = Math.floor(Math.random() * Math.floor(5));
+                    if(shinies === 1){
+                        message.channel.send('CHARGE ' + shinies + ' SHINY')
+                    }else if(shinies < 1) {
+                        shinies = 1;
+                        message.channel.send('CHARGE ' + shinies + ' SHINY')
+                    } else {
+                        message.channel.send('CHARGE ' + shinies + ' SHINIES')
+                    }
+                    break;
+                case 'average goblin':
+                    message.channel.send('NO U')
+                    break;
+                case 'bad goblin':
+                    var array = ['U WOT M8', "U HAVIN' A GIGGLE?!", 'FITE ME']
+                    var opt = Math.floor(Math.random() * Math.floor(array.length));
+                        message.channel.send(array[opt])
+                    break;    
+                
+                    case 'pet goblin':
+                        var embed = new Discord.MessageEmbed()
+                        .setImage('https://cdn.discordapp.com/attachments/304280850629918722/807288940184469594/0ca5f7863628b51c2063ed590062bf25e088165e.png')
+                        message.channel.send(embed)
+                        break;
+                default:
+                    break;
+            }
+        }
+
         if (greetings.includes(message.content.toLowerCase())) {
             //Looks up the relevant server emoji, and stores it.
             const wispWave = message.guild.emojis.cache.find(emoji => emoji.name == "wispWave_Bot")
@@ -91,8 +133,8 @@ async function main() {
         alertHandler.alert(message.text, message.senderName)
     }).catch(console.error)
 
-    let prevStream = await apiClient.helix.streams.getStreamByUserName('dawnwhisper');
-    const user = await apiClient.helix.users.getUserByName('dawnwhisper');
+    let prevStream = await apiClient.helix.streams.getStreamByUserName(twitch.streamer_channel);
+    const user = await apiClient.helix.users.getUserByName(twitch.streamer_channel);
 
     const streamLive = await webhookListener.subscribeToStreamChanges(user, async stream => {
     if (stream) {
@@ -102,7 +144,7 @@ async function main() {
         }
     } else {
         // no stream, no display name
-        const user = await apiClient.helix.users.getUserByName('dawnwhisper');
+        const user = await apiClient.helix.users.getUserByName(twitch.streamer_channel);
         console.log(`${user.displayName} just went offline`);
     }
     prevStream = stream ?? null;

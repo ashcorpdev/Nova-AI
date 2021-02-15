@@ -4,7 +4,7 @@ const { chatClient, chatList } = require('../../twitch/client')
 async function execute(message, args){
 
     //console.log('Mod command called')
-    const modslist = await chatClient.getMods('dawnwhisper').then((mods) => {
+    const modslist = await chatClient.getMods(twitch.streamer_channel).then((mods) => {
         const exclude = ['logviewer', 'streamelements', 'novaai', 'e1fb0t', 'streamcaptainbot']
 
         // This checks if any of the names are in the 'exclude' list and removes them from the final array.

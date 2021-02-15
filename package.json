@@ -9,6 +9,7 @@
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "fs": "^0.0.1-security",
+    "node-fetch": "^2.6.1",
     "twitch": "^4.4.3",
     "twitch-auth": "^4.4.3",
     "twitch-chat-client": "^4.4.3",
