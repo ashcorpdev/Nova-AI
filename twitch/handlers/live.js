@@ -11,6 +11,7 @@ async function liveAnnounce() {
     const alertColour = 0x00ff00
     const wispWave = message.guild.emojis.cache.find(emoji => emoji.name == "wispWave_Bot")
     const modEmbed = new Discord.MessageEmbed()
+        .setColor(0x32CD32)
         .setDescription('Dawn is now live! Please react to this message if you are actively modding! If you step down, please remove your reaction.\n\n[**[Regular View]**](https://www.twitch.tv/dawnwhisper) [**[Mod View]**](https://www.twitch.tv/moderator/dawnwhisper)')
     channel.send(modEmbed).then(mod_embed => {
         mod_embed.react(wispWave);

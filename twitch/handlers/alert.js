@@ -32,7 +32,6 @@ function alert(type, sender) {
             taggedRole = discord.roles.owner_id
             isRole = false;
             break;
-
         default:
             break;
     }
