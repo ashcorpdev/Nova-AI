@@ -84,7 +84,7 @@ module.exports = {
 
                         // Filter the reactions.
                         const filter = (reaction, user) => {
-                            return ['❎', '✅'].includes(reaction.emoji.name) && user.id === message.author.id;
+                            return ['❎', '✅'].includes(reaction.emoji.name) && user.id === discord.roles.dawn_id;
                         };
                         embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
                             .then(collected => {
@@ -130,7 +130,7 @@ module.exports = {
 
                         // Filter the reactions.
                         const filter = (reaction, user) => {
-                            return ['❎', '✅'].includes(reaction.emoji.name) && user.id === message.author.id;
+                            return ['❎', '✅'].includes(reaction.emoji.name) && user.id === discord.roles.dawn_id;
                         };
                         embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
                             .then(collected => {
@@ -159,7 +159,7 @@ module.exports = {
                     });
                 } else if (discordUser && !twitchUser) {
                     message.delete()
-                    
+
                     const embed = new Discord.MessageEmbed()
                         .setTitle('User to be executed:')
                         .setThumbnail(discordUser.displayAvatarURL())
@@ -173,7 +173,7 @@ module.exports = {
 
                         // Filter the reactions.
                         const filter = (reaction, user) => {
-                            return ['❎', '✅'].includes(reaction.emoji.name) && user.id === message.author.id;
+                            ['❎', '✅'].includes(reaction.emoji.name) && user.id === discord.roles.dawn_id;
                         };
                         embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
                             .then(collected => {
