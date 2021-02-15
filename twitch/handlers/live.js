@@ -8,6 +8,12 @@ async function liveAnnounce() {
     const stream = await apiClient.helix.streams.getStreamByUserName(twitch.streamer_channel);
     const currentGame = await (await stream.getGame()).name;
     const alertColour = 0x00ff00
+    const wispWave = message.guild.emojis.cache.find(emoji => emoji.name == "wispWave_Bot")
+    const modEmbed = new Discord.MessageEmbed()
+    .setDescription('Dawn is now live! Please react to this message if you are actively modding! If you step down, please remove your reaction.')
+    channel.send(modEmbed).then(mod_embed => {
+        mod_embed.react(wispWave);
+    });
 
     channel.send('Attention!')
     const embed = new Discord.MessageEmbed()
