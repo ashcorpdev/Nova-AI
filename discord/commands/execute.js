@@ -86,7 +86,7 @@ module.exports = {
                         const filter = (reaction, user) => {
                             return ['❎', '✅'].includes(reaction.emoji.name) && user.id === discord.roles.dawn_id;
                         };
-                        embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+                        embed.awaitReactions(filter, { max: 1, time: 600000, errors: ['time'] })
                             .then(collected => {
                                 const reaction = collected.first();
 
@@ -108,7 +108,7 @@ module.exports = {
                             .catch(collected => {
 
                                 const embed = new Discord.MessageEmbed()
-                                    .setDescription(`🙏 ${twitchUser.username} has been spared.`)
+                                    .setDescription(`🙏 ${twitchUser.displayName} has been spared.`)
                                 return message.channel.send(embed);
                             });
                     });
@@ -132,7 +132,7 @@ module.exports = {
                         const filter = (reaction, user) => {
                             return ['❎', '✅'].includes(reaction.emoji.name) && user.id === discord.roles.dawn_id;
                         };
-                        embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+                        embed.awaitReactions(filter, { max: 1, time: 600000, errors: ['time'] })
                             .then(collected => {
                                 const reaction = collected.first();
 
@@ -153,7 +153,7 @@ module.exports = {
                             .catch(collected => {
 
                                 const embed = new Discord.MessageEmbed()
-                                    .setDescription(`🙏 ${twitchUser.username} has been spared.`)
+                                    .setDescription(`🙏 ${twitchUser.displayName} has been spared.`)
                                 return message.channel.send(embed);
                             });
                     });
@@ -175,7 +175,7 @@ module.exports = {
                         const filter = (reaction, user) => {
                             ['❎', '✅'].includes(reaction.emoji.name) && user.id === discord.roles.dawn_id;
                         };
-                        embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+                        embed.awaitReactions(filter, { max: 1, time: 600000, errors: ['time'] })
                             .then(collected => {
                                 const reaction = collected.first();
 
