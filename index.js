@@ -146,6 +146,7 @@ async function main() {
         // no stream, no display name
         const user = await apiClient.helix.users.getUserByName(twitch.streamer_channel);
         console.log(`${user.displayName} just went offline`);
+        liveHandler.liveMessage.delete();
     }
     prevStream = stream ?? null;
 });
