@@ -73,128 +73,131 @@ module.exports = {
                         .addField('Twitch', twitchUser.displayName, true)
                         .addField('Discord', discordUser.username, true)
                         .addField('Discord ID', discordUser.id, true)
-                        message.channel.send(embed).then(embed => {
+                    message.channel.send(embed).then(embed => {
 
-                            // Execute the ban on the Twitch user.
-                            chatClient.ban(twitch.streamer_channel, twitchUser.displayName)
-                            message.guild.members.ban(discordUser)
 
-                            message.delete()
+                        message.delete()
 
-                            // Add the reactions to the embed message.
-                            embed.react('❎')
-                            embed.react('✅')
-    
-                            // Filter the reactions.
-                            const filter = (reaction, user) => {
-                                return ['❎', '✅'].includes(reaction.emoji.name) && user.id === message.author.id;
-                            };
-                            embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-                                .then(collected => {
-                                    const reaction = collected.first();
-    
-                                    if (reaction.emoji.name === '❎') {
-                                        
-                                        const embed = new Discord.MessageEmbed()
-                                        .setDescription(`🙏 ${twitchUser.displayName} has been spared.`)
-                                        return message.channel.send(embed);
-                                    } else {
-                                        const embed = new Discord.MessageEmbed()
-                                        .setDescription(`💀 ${twitchUser.displayName} has been executed.`)
-                                        return message.channel.send(embed);
-                                    }
-                                })
-                                .catch(collected => {
-                                        
+                        // Add the reactions to the embed message.
+                        embed.react('❎')
+                        embed.react('✅')
+
+                        // Filter the reactions.
+                        const filter = (reaction, user) => {
+                            return ['❎', '✅'].includes(reaction.emoji.name) && user.id === message.author.id;
+                        };
+                        embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+                            .then(collected => {
+                                const reaction = collected.first();
+
+                                if (reaction.emoji.name === '❎') {
+
                                     const embed = new Discord.MessageEmbed()
-                                    .setDescription(`🙏 ${twitchUser.username} has been spared.`)
+                                        .setDescription(`🙏 ${twitchUser.displayName} has been spared.`)
                                     return message.channel.send(embed);
-                                });
+                                } else {
+                                    const embed = new Discord.MessageEmbed()
+                                        .setDescription(`💀 ${twitchUser.displayName} has been executed.`)
+                                        
+                        // Execute the ban on the Twitch user.
+                        chatClient.ban(twitch.streamer_channel, twitchUser.displayName)
+                        message.guild.members.ban(discordUser)
+                                    return message.channel.send(embed);
+                                }
+                            })
+                            .catch(collected => {
+
+                                const embed = new Discord.MessageEmbed()
+                                    .setDescription(`🙏 ${twitchUser.username} has been spared.`)
+                                return message.channel.send(embed);
+                            });
                     });
 
                 } else if (twitchUser && !discordUser) {
-
-                    // Execute the ban on the Twitch user.
-                    chatClient.ban(twitch.streamer_channel, twitchUser.displayName)
 
                     //Send message to Discord.
                     const embed = new Discord.MessageEmbed()
                         .setTitle('User to be executed:')
                         .setThumbnail(twitchUser.profilePictureUrl)
                         .addField('Twitch', twitchUser.displayName, true)
-                        
-                        message.channel.send(embed).then(embed => {
-                            message.delete()
 
-                            // Add the reactions to the embed message.
-                            embed.react('❎')
-                            embed.react('✅')
-    
-                            // Filter the reactions.
-                            const filter = (reaction, user) => {
-                                return ['❎', '✅'].includes(reaction.emoji.name) && user.id === message.author.id;
-                            };
-                            embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-                                .then(collected => {
-                                    const reaction = collected.first();
-    
-                                    if (reaction.emoji.name === '❎') {
-                                        
-                                        const embed = new Discord.MessageEmbed()
-                                        .setDescription(`🙏 ${twitchUser.displayName} has been spared.`)
-                                        return message.channel.send(embed);
-                                    } else {
-                                        const embed = new Discord.MessageEmbed()
-                                        .setDescription(`💀 ${twitchUser.displayName} has been executed.`)
-                                        return message.channel.send(embed);
-                                    }
-                                })
-                                .catch(collected => {
-                                        
+                    message.channel.send(embed).then(embed => {
+                        message.delete()
+
+                        // Add the reactions to the embed message.
+                        embed.react('❎')
+                        embed.react('✅')
+
+                        // Filter the reactions.
+                        const filter = (reaction, user) => {
+                            return ['❎', '✅'].includes(reaction.emoji.name) && user.id === message.author.id;
+                        };
+                        embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+                            .then(collected => {
+                                const reaction = collected.first();
+
+                                if (reaction.emoji.name === '❎') {
+
                                     const embed = new Discord.MessageEmbed()
-                                    .setDescription(`🙏 ${twitchUser.username} has been spared.`)
+                                        .setDescription(`🙏 ${twitchUser.displayName} has been spared.`)
                                     return message.channel.send(embed);
-                                });
+                                } else {
+                                    const embed = new Discord.MessageEmbed()
+                                        .setDescription(`💀 ${twitchUser.displayName} has been executed.`)
+
+                                    // Execute the ban on the Twitch user.
+                                    chatClient.ban(twitch.streamer_channel, twitchUser.displayName)
+                                    return message.channel.send(embed);
+                                }
+                            })
+                            .catch(collected => {
+
+                                const embed = new Discord.MessageEmbed()
+                                    .setDescription(`🙏 ${twitchUser.username} has been spared.`)
+                                return message.channel.send(embed);
+                            });
                     });
                 } else if (discordUser && !twitchUser) {
+                    message.delete()
+                    
                     const embed = new Discord.MessageEmbed()
                         .setTitle('User to be executed:')
                         .setThumbnail(discordUser.displayAvatarURL())
                         .addField('Discord', discordUser.username, true)
                         .addField('Discord ID', discordUser.id, true)
-                        message.channel.send(embed).then(embed => {
-                            message.guild.members.ban(discordUser)
-                            message.delete()
+                    message.channel.send(embed).then(embed => {
 
-                            // Add the reactions to the embed message.
-                            embed.react('❎')
-                            embed.react('✅')
-    
-                            // Filter the reactions.
-                            const filter = (reaction, user) => {
-                                return ['❎', '✅'].includes(reaction.emoji.name) && user.id === message.author.id;
-                            };
-                            embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-                                .then(collected => {
-                                    const reaction = collected.first();
-    
-                                    if (reaction.emoji.name === '❎') {
-                                        
-                                        const embed = new Discord.MessageEmbed()
-                                        .setDescription(`🙏 ${discordUser.username} has been spared.`)
-                                        return message.channel.send(embed);
-                                    } else {
-                                        const embed = new Discord.MessageEmbed()
-                                        .setDescription(`💀 ${discordUser.username} has been executed.`)
-                                        return message.channel.send(embed);
-                                    }
-                                })
-                                .catch(collected => {
-                                        
+                        // Add the reactions to the embed message.
+                        embed.react('❎')
+                        embed.react('✅')
+
+                        // Filter the reactions.
+                        const filter = (reaction, user) => {
+                            return ['❎', '✅'].includes(reaction.emoji.name) && user.id === message.author.id;
+                        };
+                        embed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+                            .then(collected => {
+                                const reaction = collected.first();
+
+                                if (reaction.emoji.name === '❎') {
+
                                     const embed = new Discord.MessageEmbed()
-                                    .setDescription(`🙏 ${discordUser.username} has been spared.`)
+                                        .setDescription(`🙏 ${discordUser.username} has been spared.`)
                                     return message.channel.send(embed);
-                                });
+                                } else {
+                                    const embed = new Discord.MessageEmbed()
+                                        .setDescription(`💀 ${discordUser.username} has been executed.`)
+
+                                    message.guild.members.ban(discordUser)
+                                    return message.channel.send(embed);
+                                }
+                            })
+                            .catch(collected => {
+
+                                const embed = new Discord.MessageEmbed()
+                                    .setDescription(`🙏 ${discordUser.username} has been spared.`)
+                                return message.channel.send(embed);
+                            });
                     });
                 }
 
